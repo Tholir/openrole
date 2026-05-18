@@ -1,882 +1,272 @@
-# Crush
+# OPENROLE
 
 <p align="center">
-    <a href="https://stuff.charm.sh/crush/charm-crush.png"><img width="450" alt="Charm Crush Logo" src="https://github.com/user-attachments/assets/cf8ca3ce-8b02-43f0-9d0f-5a331488da4b" /></a><br />
-    <a href="https://github.com/charmbracelet/crush/releases"><img src="https://img.shields.io/github/release/charmbracelet/crush" alt="Latest Release"></a>
-    <a href="https://github.com/charmbracelet/crush/actions"><img src="https://github.com/charmbracelet/crush/actions/workflows/build.yml/badge.svg" alt="Build Status"></a>
+  <img src="https://img.shields.io/badge/Platform-Terminal%20TUI-green?style=flat-square" alt="Platform">
+  <img src="https://img.shields.io/badge/Framework-Bubble%20Tea%20v2-blue?style=flat-square" alt="Framework">
+  <img src="https://img.shields.io/badge/D&D-5e%20Edition-orange?style=flat-square" alt="Edition">
 </p>
 
-<p align="center">Your new coding bestie, now available in your favourite terminal.<br />Your tools, your code, and your workflows, wired into your LLM of choice.</p>
-<p align="center">终端里的编程新搭档，<br />无缝接入你的工具、代码与工作流，全面兼容主流 LLM 模型。</p>
+<p align="center">
+█ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █<br/>
+<strong>RETRO TERMINAL D&D 5e ROLEPLAYING</strong><br/>
+█ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █
+</p>
 
-<p align="center"><img width="800" alt="Crush Demo" src="https://github.com/user-attachments/assets/58280caf-851b-470a-b6f7-d5c4ea8a1968" /></p>
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  ██████╗ ██╗   ██╗███╗   ██╗ ██████╗ ███████╗ ██████╗ ███╗   ██╗           │
+│  ██╔══██╗██║   ██║████╗  ██║██╔════╝ ██╔════╝██╔═══██╗████╗  ██║           │
+│  ██████╔╝██║   ██║██╔██╗ ██║██║  ███╗█████╗  ██║   ██║██╔██╗ ██║           │
+│  ██╔══██╗██║   ██║██║╚██╗██║██║   ██║██╔══╝  ██║   ██║██║╚██╗██║           │
+│  ██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝███████╗╚██████╔╝██║ ╚████║           │
+│  ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝           │
+│                                                                              │
+│                    ╔═══════════════════════════════════════╗               │
+│                    ║   ANTARCTIC DUNGEON MASTER AI v1.0      ║               │
+│                    ║   "Where the cold seeps into your soul" ║               │
+│                    ╚═══════════════════════════════════════╝               │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
 
-## Features
+## Overview
 
-- **Multi-Model:** choose from a wide range of LLMs or add your own via OpenAI- or Anthropic-compatible APIs
-- **Flexible:** switch LLMs mid-session while preserving context
-- **Session-Based:** maintain multiple work sessions and contexts per project
-- **LSP-Enhanced:** Crush uses LSPs for additional context, just like you do
-- **Extensible:** add capabilities via MCPs (`http`, `stdio`, and `sse`)
-- **Works Everywhere:** first-class support in every terminal on macOS, Linux, Windows (PowerShell and WSL), Android, FreeBSD, OpenBSD, and NetBSD
-- **Industrial Grade:** built on the Charm ecosystem, powering 25k+ applications, from leading open source projects to business-critical infrastructure
+OPENROLE is a retro terminal-based D&D 5e roleplaying plugin powered by Bubble Tea v2. It features a full Dungeon Master AI with an Antarctic theme, complete with ASCII character sheets, dice rolling animations, and a nostalgic CRT aesthetic.
+
+### Features
+
+- **Antarctic Dungeon Master AI**: A uniquely themed DM with dry wit and quirky personality
+- **ASCII Character Sheets**: Full D&D 5e character management with ability scores, HP tracking, and inventory
+- **Animated Dice Rolling**: Particle effects and color cycling for spell effects
+- **Retro CRT Aesthetic**: Scanlines, flicker effects, and phosphor green display
+- **Multi-Player Sessions**: Support for multiple players with session management
+- **80x25 Classic Terminal**: Authentic vintage terminal experience
 
 ## Installation
 
-Use a package manager:
+```bash
+# Clone the repository
+git clone https://github.com/gentleman-programming/openrole.git
+cd openrole
+
+# Build the application
+go build -o openrole ./cmd/openrole
+
+# Run
+./openrole
+```
+
+Or run directly:
+```bash
+go run ./cmd/openrole
+```
+
+## Quick Start
+
+1. Launch OPENROLE
+2. You are greeted by the Antarctic DM who introduces themselves
+3. Create your character using the character sheet interface
+4. Start your adventure!
+
+```
+> create_character
+┌────────────────────────────────────────────────────────────────────────┐
+│  Level 1 Human Fighter                                                 │
+│                                                                        │
+│  HP: [██████████] 12/12  AC: 16                                        │
+│                                                                        │
+│  STR: 16 (+3)     DEX: 14 (+2)     CON: 15 (+2)                        │
+│  INT: 10 (+0)     WIS: 13 (+1)     CHA: 11 (+0)                        │
+│                                                                        │
+│  Skills: Athletics, Survival, Perception                               │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+## Usage
+
+### Starting a Session
 
 ```bash
-# Homebrew
-brew install charmbracelet/tap/crush
-
-# NPM
-npm install -g @charmland/crush
-
-# Arch Linux (btw)
-yay -S crush-bin
-
-# Nix
-nix run github:numtide/nix-ai-tools#crush
-
-# FreeBSD
-pkg install crush
+./openrole
 ```
 
-Windows users:
+The DM will welcome you with an Antarctic-themed icebreaker fact.
 
-```bash
-# Winget
-winget install charmbracelet.crush
+### Navigation
 
-# Scoop
-scoop bucket add charm https://github.com/charmbracelet/scoop-bucket.git
-scoop install crush
-```
+| Key | Action |
+|-----|--------|
+| `↑` / `↓` | Navigate history |
+| `Enter` | Submit command |
+| `Backspace` | Delete character |
+| `Ctrl+C` / `q` | Quit |
 
-<details>
-<summary><strong>Nix (NUR)</strong></summary>
+### Views
 
-Crush is available via the official Charm [NUR](https://github.com/nix-community/NUR) in `nur.repos.charmbracelet.crush`, which is the most up-to-date way to get Crush in Nix.
+| View | Key | Description |
+|------|-----|-------------|
+| Main | Default | Session output and input |
+| Character | `c` | View character sheet |
+| Combat | `x` | Initiative tracker |
+| Inventory | `i` | Item management |
+| Dice | `d` | Roll dice (e.g., `2d20+5`) |
+| Menu | `m` | Main menu |
 
-You can also try out Crush via the NUR with `nix-shell`:
-
-```bash
-# Add the NUR channel.
-nix-channel --add https://github.com/nix-community/NUR/archive/main.tar.gz nur
-nix-channel --update
-
-# Get Crush in a Nix shell.
-nix-shell -p '(import <nur> { pkgs = import <nixpkgs> {}; }).repos.charmbracelet.crush'
-```
-
-### NixOS & Home Manager Module Usage via NUR
-
-Crush provides NixOS and Home Manager modules via NUR.
-You can use these modules directly in your flake by importing them from NUR. Since it auto detects whether its a home manager or nixos context you can use the import the exact same way :)
-
-```nix
-{
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nur.url = "github:nix-community/NUR";
-  };
-
-  outputs = { self, nixpkgs, nur, ... }: {
-    nixosConfigurations.your-hostname = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        nur.modules.nixos.default
-        nur.repos.charmbracelet.modules.crush
-        {
-          programs.crush = {
-            enable = true;
-            settings = {
-              providers = {
-                openai = {
-                  id = "openai";
-                  name = "OpenAI";
-                  base_url = "https://api.openai.com/v1";
-                  type = "openai";
-                  api_key = "sk-fake123456789abcdef...";
-                  models = [
-                    {
-                      id = "gpt-4";
-                      name = "GPT-4";
-                    }
-                  ];
-                };
-              };
-              lsp = {
-                go = { command = "gopls"; enabled = true; };
-                nix = { command = "nil"; enabled = true; };
-              };
-              options = {
-                context_paths = [ "/etc/nixos/configuration.nix" ];
-                tui = { compact_mode = true; };
-                debug = false;
-              };
-            };
-          };
-        }
-      ];
-    };
-  };
-}
-```
-
-</details>
-
-<details>
-<summary><strong>Debian/Ubuntu</strong></summary>
-
-```bash
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
-echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
-sudo apt update && sudo apt install crush
-```
-
-</details>
-
-<details>
-<summary><strong>Fedora/RHEL</strong></summary>
-
-```bash
-echo '[charm]
-name=Charm
-baseurl=https://repo.charm.sh/yum/
-enabled=1
-gpgcheck=1
-gpgkey=https://repo.charm.sh/yum/gpg.key' | sudo tee /etc/yum.repos.d/charm.repo
-sudo yum install crush
-```
-
-</details>
-
-Or, download it:
-
-- [Packages][releases] are available in Debian and RPM formats
-- [Binaries][releases] are available for Linux, macOS, Windows, FreeBSD, OpenBSD, and NetBSD
-
-[releases]: https://github.com/charmbracelet/crush/releases
-
-Or just install it with Go:
+### Dice Commands
 
 ```
-go install github.com/charmbracelet/crush@latest
+> roll 2d20+5      # Roll two twenty-sided dice plus five
+> roll 1d20        # Roll a natural twenty
+> roll 8d6         # Fireball damage
+> roll 4d6         # Standard ability check
 ```
-
-> [!WARNING]
-> Productivity may increase when using Crush and you may find yourself nerd
-> sniped when first using the application. If the symptoms persist, join the
-> [Slack][slack] or [Discord][discord] and nerd snipe the rest of us.
-
-## Getting Started
-
-The quickest way to get started is to grab an API key for your preferred
-provider such as Anthropic, OpenAI, Groq, OpenRouter, or Vercel AI Gateway and just start
-Crush. You'll be prompted to enter your API key.
-
-That said, you can also set environment variables for preferred providers.
-
-| Environment Variable        | Provider                                           |
-| --------------------------- | -------------------------------------------------- |
-| `HYPER_API_KEY`             | Charm Hyper                                        |
-| `ANTHROPIC_API_KEY`         | Anthropic                                          |
-| `OPENAI_API_KEY`            | OpenAI                                             |
-| `VERCEL_API_KEY`            | Vercel AI Gateway                                  |
-| `GEMINI_API_KEY`            | Google Gemini                                      |
-| `SYNTHETIC_API_KEY`         | Synthetic                                          |
-| `ZAI_API_KEY`               | Z.ai                                               |
-| `MINIMAX_API_KEY`           | MiniMax                                            |
-| `HF_TOKEN`                  | Hugging Face Inference                             |
-| `CEREBRAS_API_KEY`          | Cerebras                                           |
-| `OPENROUTER_API_KEY`        | OpenRouter                                         |
-| `IONET_API_KEY`             | io.net                                             |
-| `GROQ_API_KEY`              | Groq                                               |
-| `AVIAN_API_KEY`             | Avian                                              |
-| `OPENCODE_API_KEY`          | OpenCode Zen & Go                                  |
-| `VERTEXAI_PROJECT`          | Google Cloud VertexAI (Gemini)                     |
-| `VERTEXAI_LOCATION`         | Google Cloud VertexAI (Gemini)                     |
-| `AWS_ACCESS_KEY_ID`         | Amazon Bedrock (Claude)                            |
-| `AWS_SECRET_ACCESS_KEY`     | Amazon Bedrock (Claude)                            |
-| `AWS_REGION`                | Amazon Bedrock (Claude)                            |
-| `AWS_PROFILE`               | Amazon Bedrock (Custom Profile)                    |
-| `AWS_BEARER_TOKEN_BEDROCK`  | Amazon Bedrock                                     |
-| `AZURE_OPENAI_API_ENDPOINT` | Azure OpenAI models                                |
-| `AZURE_OPENAI_API_KEY`      | Azure OpenAI models (optional when using Entra ID) |
-| `AZURE_OPENAI_API_VERSION`  | Azure OpenAI models                                |
-
-### Subscriptions
-
-If you prefer subscription-based usage, here are some plans that work well in
-Crush:
-
-- [Synthetic](https://synthetic.new/pricing)
-- [GLM Coding Plan](https://z.ai/subscribe)
-- [Kimi Code](https://www.kimi.com/membership/pricing)
-- [MiniMax Coding Plan](https://platform.minimax.io/subscribe/coding-plan)
-
-### By the Way
-
-Is there a provider you’d like to see in Crush? Is there an existing model that needs an update?
-
-Crush’s default model listing is managed in [Catwalk](https://github.com/charmbracelet/catwalk), a community-supported, open source repository of Crush-compatible models, and you’re welcome to contribute.
-
-<a href="https://github.com/charmbracelet/catwalk"><img width="174" height="174" alt="Catwalk Badge" src="https://github.com/user-attachments/assets/95b49515-fe82-4409-b10d-5beb0873787d" /></a>
 
 ## Configuration
 
-> [!TIP]
-> Crush ships with a builtin `crush-config` skill for configuring itself. In
-> many cases you can simply ask Crush to configure itself.
+Animation intensity can be adjusted in `internal/tui/animator.go`:
 
-Crush runs great with no configuration. That said, if you do need or want to
-customize Crush, configuration can be added either local to the project itself,
-or globally, with the following priority:
-
-1. `.crush.json`
-2. `crush.json`
-3. `$HOME/.config/crush/crush.json`
-
-Configuration itself is stored as a JSON object:
-
-```json
-{
-  "this-setting": { "this": "that" },
-  "that-setting": ["ceci", "cela"]
-}
+```go
+// Default is AnimationLow for optimal performance
+Intensity: AnimationLow   // Options: AnimationOff, AnimationLow, AnimationHigh
 ```
 
-As an additional note, Crush also stores ephemeral data, such as application
-state, in one additional location:
+### Default Settings
+
+| Setting | Value |
+|---------|-------|
+| Frame Rate | 30 FPS |
+| Particle Count | 12 |
+| Flicker Hz | 12 |
+| Animation Intensity | Low (optimal) |
+
+## Architecture
+
+```
+openrole/
+├── cmd/openrole/main.go           # Entry point
+├── internal/
+│   ├── tui/                       # Bubble Tea TUI
+│   │   ├── animator.go            # Animation system
+│   │   ├── model.go               # Main TUI model
+│   │   ├── character.go           # Character sheet renderer
+│   │   ├── inventory.go           # Inventory display
+│   │   ├── viewport.go            # 80x25 viewport management
+│   │   ├── colorcycle.go          # Spell effect colors
+│   │   ├── particles.go           # Particle effects
+│   │   ├── flicker.go             # Text flicker effects
+│   │   └── ansi.go                # ANSI escape sequences
+│   └── types/
+│       └── game.go                # D&D 5e domain types
+└── README.md
+```
+
+## Keyboard Shortcuts
+
+### Global
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+C` | Exit application |
+| `q` | Quit |
+| `↑` | Command history (previous) |
+| `↓` | Command history (next) |
+| `←`/`→` | Move cursor |
+| `Home`/`End` | Line start/end |
+| `Backspace` | Delete left |
+| `Delete` | Delete right |
+
+### Game Views
+
+| Shortcut | View |
+|----------|------|
+| `1` | Main output |
+| `2` | Character sheet |
+| `3` | Combat tracker |
+| `4` | Inventory |
+| `5` | Dice roller |
+| `6` | Menu |
+
+## Retro CRT Features
+
+### Visual Effects
+
+- **Scanlines**: Subtle horizontal lines for CRT authenticity
+- **Phosphor Glow**: Green-on-black with 256-color support
+- **Text Flicker**: 12Hz flicker on active elements
+- **Particle Effects**: Spell animations with color cycling
+
+### ASCII Art
+
+```
+    ╔═══════════════════════════════════════╗
+    ║  ⚔️  OPENROLE  ⚔️                     ║
+    ║  "Where the cold seeps into your soul"║
+    ╚═══════════════════════════════════════╝
+```
+
+### Color Palette
+
+| Element | Color | ANSI Code |
+|---------|-------|-----------|
+| Header | Bright Green | #00ff00 |
+| Border | Dark Green | 32 |
+| Content | Light Green | 82 |
+| Accent | Yellow | 226 |
+| Spell Effects | Cycling | 196→214→226→231 |
+
+## DM Personality
+
+The Antarctic Dungeon Master brings unique flavor to sessions:
+
+- **Base Character**: Eccentric AI based in Antarctica
+- **Traits**: Dry humor, dramatic timing, oddly comforting
+- **Quirks**:
+  - References Antarctic wildlife in analogies
+  - Mentions aurora australis for magical phenomena
+  - Occasional "brrr" for emphasis
+
+### Sample Dialogue
+
+```
+> DM: "The ancient door creaks open, revealing darkness beyond..."
+> DM: "Did you know Emperor penguins can dive deeper than most submarines? *brrr*"
+> DM: "The aurora australis dances overhead as magic crackles in the air."
+```
+
+## Development
+
+### Building
 
 ```bash
-# Unix
-$HOME/.local/share/crush/crush.json
+# Standard build
+go build -o openrole ./cmd/openrole
 
-# Windows
-%LOCALAPPDATA%\crush\crush.json
+# With profile
+go build -o openrole ./cmd/openrole
+CRUSH_PROFILE=1 ./openrole  # pprof at localhost:6060
 ```
 
-> [!TIP]
-> You can override the user and data config locations by setting:
->
-> - `CRUSH_GLOBAL_CONFIG`
-> - `CRUSH_GLOBAL_DATA`
-
-### LSPs
-
-Crush can use LSPs for additional context to help inform its decisions, just
-like you would. LSPs can be added manually like so:
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "lsp": {
-    "go": {
-      "command": "gopls",
-      "env": {
-        "GOTOOLCHAIN": "go1.24.5"
-      }
-    },
-    "typescript": {
-      "command": "typescript-language-server",
-      "args": ["--stdio"]
-    },
-    "nix": {
-      "command": "nil"
-    }
-  }
-}
-```
-
-### MCPs
-
-Crush also supports Model Context Protocol (MCP) servers through three transport
-types: `stdio` for command-line servers, `http` for HTTP endpoints, and `sse`
-for Server-Sent Events.
-
-Shell-style value expansion (`$VAR`, `${VAR:-default}`, `$(command)`, quoting,
-nesting) works in `command`, `args`, `env`, `headers`, and `url`, so
-file-based secrets work out of the box. You can use values like `"$TOKEN"`
-or `"$(cat /path/to/secret/token)"`. Expansion runs through Crush's embedded
-shell, so the same syntax works on every supported system, Windows included.
-
-Unset variables expand to the empty string by default, matching bash. For
-required credentials, use `${VAR:?message}` so an unset variable fails loudly
-at load time with `message` instead of silently resolving to empty:
-
-```json
-{ "api_key": "${CODEBERG_TOKEN:?set CODEBERG_TOKEN}" }
-```
-
-Headers (both MCP `headers` and provider `extra_headers`) whose value
-resolves to the empty string are dropped from the outgoing request rather
-than sent as `Header:`. That keeps optional env-gated headers like
-`"OpenAI-Organization": "$OPENAI_ORG_ID"` clean when the variable is unset.
-
-Provider `extra_body` is a non-expanding JSON passthrough; put env-driven
-values in `extra_headers` or the provider's `api_key` / `base_url`, all of
-which do expand.
-
-> **Security note:** `crush.json` is trusted code. Any `$(...)` in it runs at
-> load time with your shell's privileges, before the UI appears. Don't launch
-> Crush in a directory whose `crush.json` you haven't reviewed.
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "mcp": {
-    "filesystem": {
-      "type": "stdio",
-      "command": "node",
-      "args": ["/path/to/mcp-server.js"],
-      "timeout": 120,
-      "disabled": false,
-      "disabled_tools": ["some-tool-name"],
-      "env": {
-        "NODE_ENV": "production"
-      }
-    },
-    "github": {
-      "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/",
-      "timeout": 120,
-      "disabled": false,
-      "disabled_tools": ["create_issue", "create_pull_request"],
-      "headers": {
-        "Authorization": "Bearer $GH_PAT"
-      }
-    },
-    "streaming-service": {
-      "type": "sse",
-      "url": "https://example.com/mcp/sse",
-      "timeout": 120,
-      "disabled": false,
-      "headers": {
-        "API-Key": "$(echo $API_KEY)"
-      }
-    }
-  }
-}
-```
-
-### Hooks
-
-Crush has preliminary support for hooks. For details, see
-[the hook guide](./docs/hooks/).
-
-### Ignoring Files
-
-Crush respects `.gitignore` files by default, but you can also create a
-`.crushignore` file to specify additional files and directories that Crush
-should ignore. This is useful for excluding files that you want in version
-control but don't want Crush to consider when providing context.
-
-The `.crushignore` file uses the same syntax as `.gitignore` and can be placed
-in the root of your project or in subdirectories.
-
-### Allowing Tools
-
-By default, Crush will ask you for permission before running tool calls. If
-you'd like, you can allow tools to be executed without prompting you for
-permissions. Use this with care.
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "permissions": {
-    "allowed_tools": [
-      "view",
-      "ls",
-      "grep",
-      "edit",
-      "mcp_context7_get-library-doc"
-    ]
-  }
-}
-```
-
-You can also skip all permission prompts entirely by running Crush with the
-`--yolo` flag. Be very, very careful with this feature.
-
-### Disabling Built-In Tools
-
-If you'd like to prevent Crush from using certain built-in tools entirely, you
-can disable them via the `options.disabled_tools` list. Disabled tools are
-completely hidden from the agent.
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "options": {
-    "disabled_tools": ["bash", "sourcegraph"]
-  }
-}
-```
-
-To disable tools from MCP servers, see the [MCP config section](#mcps).
-
-### Disabling Skills
-
-If you'd like to prevent Crush from using certain skills entirely, you can
-disable them via the `options.disabled_skills` list. Disabled skills are hidden
-from the agent, including builtin skills and skills discovered from disk.
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "options": {
-    "disabled_skills": ["crush-config"]
-  }
-}
-```
-
-### Agent Skills
-
-Crush supports the [Agent Skills](https://agentskills.io) open standard for
-extending agent capabilities with reusable skill packages. Skills are folders
-containing a `SKILL.md` file with instructions that Crush can discover and
-activate on demand.
-
-The global paths we looks for skills are:
-
-* `$CRUSH_SKILLS_DIR`
-* `$XDG_CONFIG_HOME/agents/skills` or `~/.config/agents/skills/`
-* `$XDG_CONFIG_HOME/crush/skills` or `~/.config/crush/skills/`
-* `~/.agents/skills/`
-* `~/.claude/skills/`
-* On Windows, we _also_ look at
-  * `%LOCALAPPDATA%\agents\skills\` or `%USERPROFILE%\AppData\Local\agents\skills\`
-  * `%LOCALAPPDATA%\crush\skills\` or `%USERPROFILE%\AppData\Local\crush\skills\`
-* Additional paths configured via `options.skills_paths`
-
-On top of that, we _also_ load skills in your project from the following
-relative paths:
-
-* `.agents/skills`
-* `.crush/skills`
-* `.claude/skills`
-* `.cursor/skills`
-
-```jsonc
-{
-  "$schema": "https://charm.land/crush.json",
-  "options": {
-    "skills_paths": [
-      "~/.config/crush/skills", // Windows: "%LOCALAPPDATA%\\crush\\skills",
-      "./project-skills",
-    ],
-  },
-}
-```
-
-You can get started with example skills from [anthropics/skills](https://github.com/anthropics/skills):
+### Testing
 
 ```bash
-# Unix
-mkdir -p ~/.config/crush/skills
-cd ~/.config/crush/skills
-git clone https://github.com/anthropics/skills.git _temp
-mv _temp/skills/* . && rm -rf _temp
+go test ./...
 ```
 
-```powershell
-# Windows (PowerShell)
-mkdir -Force "$env:LOCALAPPDATA\crush\skills"
-cd "$env:LOCALAPPDATA\crush\skills"
-git clone https://github.com/anthropics/skills.git _temp
-mv _temp/skills/* . ; rm -r -force _temp
-```
-
-### Desktop notifications
-
-Crush sends desktop notifications when a tool call requires permission and when
-the agent finishes its turn. They're only sent when the terminal window isn't
-focused _and_ your terminal supports reporting the focus state.
-
-```jsonc
-{
-  "$schema": "https://charm.land/crush.json",
-  "options": {
-    "disable_notifications": false, // default
-  },
-}
-```
-
-To disable desktop notifications, set `disable_notifications` to `true` in your
-configuration. On macOS, notifications currently lack icons due to platform
-limitations.
-
-### Initialization
-
-When you initialize a project, Crush analyzes your codebase and creates
-a context file that helps it work more effectively in future sessions.
-By default, this file is named `AGENTS.md`, but you can customize the
-name and location with the `initialize_as` option:
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "options": {
-    "initialize_as": "AGENTS.md"
-  }
-}
-```
-
-This is useful if you prefer a different naming convention or want to
-place the file in a specific directory (e.g., `CRUSH.md` or
-`docs/LLMs.md`). Crush will fill the file with project-specific context
-like build commands, code patterns, and conventions it discovered during
-initialization.
-
-### Attribution Settings
-
-By default, Crush adds attribution information to Git commits and pull requests
-it creates. You can customize this behavior with the `attribution` option:
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "options": {
-    "attribution": {
-      "trailer_style": "co-authored-by",
-      "generated_with": true
-    }
-  }
-}
-```
-
-- `trailer_style`: Controls the attribution trailer added to commit messages
-  (default: `assisted-by`)
-  - `assisted-by`: Adds `Assisted-by: Crush:[ModelID]` as specified in [the convention](https://docs.kernel.org/process/coding-assistants.html#attribution)
-  - `co-authored-by`: Adds `Co-Authored-By: Crush <crush@charm.land>`
-  - `none`: No attribution trailer
-- `generated_with`: When true (default), adds `💘 Generated with Crush` line to
-  commit messages and PR descriptions
-
-### Custom Providers
-
-Crush supports custom provider configurations for both OpenAI-compatible and
-Anthropic-compatible APIs.
-
-> [!NOTE]
-> Note that we support two "types" for OpenAI. Make sure to choose the right one
-> to ensure the best experience!
->
-> - `openai` should be used when proxying or routing requests through OpenAI.
-> - `openai-compat` should be used when using non-OpenAI providers that have OpenAI-compatible APIs.
-
-#### OpenAI-Compatible APIs
-
-Here’s an example configuration for Deepseek, which uses an OpenAI-compatible
-API. Don't forget to set `DEEPSEEK_API_KEY` in your environment.
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "providers": {
-    "deepseek": {
-      "type": "openai-compat",
-      "base_url": "https://api.deepseek.com/v1",
-      "api_key": "$DEEPSEEK_API_KEY",
-      "models": [
-        {
-          "id": "deepseek-chat",
-          "name": "Deepseek V3",
-          "cost_per_1m_in": 0.27,
-          "cost_per_1m_out": 1.1,
-          "cost_per_1m_in_cached": 0.07,
-          "cost_per_1m_out_cached": 1.1,
-          "context_window": 64000,
-          "default_max_tokens": 5000
-        }
-      ]
-    }
-  }
-}
-```
-
-#### Anthropic-Compatible APIs
-
-Custom Anthropic-compatible providers follow this format:
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "providers": {
-    "custom-anthropic": {
-      "type": "anthropic",
-      "base_url": "https://api.anthropic.com/v1",
-      "api_key": "$ANTHROPIC_API_KEY",
-      "extra_headers": {
-        "anthropic-version": "2023-06-01"
-      },
-      "models": [
-        {
-          "id": "claude-sonnet-4-20250514",
-          "name": "Claude Sonnet 4",
-          "cost_per_1m_in": 3,
-          "cost_per_1m_out": 15,
-          "cost_per_1m_in_cached": 3.75,
-          "cost_per_1m_out_cached": 0.3,
-          "context_window": 200000,
-          "default_max_tokens": 50000,
-          "can_reason": true,
-          "supports_attachments": true
-        }
-      ]
-    }
-  }
-}
-```
-
-### Amazon Bedrock
-
-Crush currently supports running Anthropic models through Bedrock, with caching disabled.
-
-- A Bedrock provider will appear once you have AWS configured, i.e. `aws configure`
-- Crush also expects the `AWS_REGION` or `AWS_DEFAULT_REGION` to be set
-- To use a specific AWS profile set `AWS_PROFILE` in your environment, i.e. `AWS_PROFILE=myprofile crush`
-- Alternatively to `aws configure`, you can also just set `AWS_BEARER_TOKEN_BEDROCK`
-
-### Vertex AI Platform
-
-Vertex AI will appear in the list of available providers when `VERTEXAI_PROJECT` and `VERTEXAI_LOCATION` are set. You will also need to be authenticated:
+### Code Style
 
 ```bash
-gcloud auth application-default login
+gofumpt -w .
+goimports -w .
 ```
-
-To add specific models to the configuration, configure as such:
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "providers": {
-    "vertexai": {
-      "models": [
-        {
-          "id": "claude-sonnet-4@20250514",
-          "name": "VertexAI Sonnet 4",
-          "cost_per_1m_in": 3,
-          "cost_per_1m_out": 15,
-          "cost_per_1m_in_cached": 3.75,
-          "cost_per_1m_out_cached": 0.3,
-          "context_window": 200000,
-          "default_max_tokens": 50000,
-          "can_reason": true,
-          "supports_attachments": true
-        }
-      ]
-    }
-  }
-}
-```
-
-### Local Models
-
-Local models can also be configured via OpenAI-compatible API. Here are two common examples:
-
-#### Ollama
-
-```json
-{
-  "providers": {
-    "ollama": {
-      "name": "Ollama",
-      "base_url": "http://localhost:11434/v1/",
-      "type": "openai-compat",
-      "models": [
-        {
-          "name": "Qwen 3 30B",
-          "id": "qwen3:30b",
-          "context_window": 256000,
-          "default_max_tokens": 20000
-        }
-      ]
-    }
-  }
-}
-```
-
-#### LM Studio
-
-```json
-{
-  "providers": {
-    "lmstudio": {
-      "name": "LM Studio",
-      "base_url": "http://localhost:1234/v1/",
-      "type": "openai-compat",
-      "models": [
-        {
-          "name": "Qwen 3 30B",
-          "id": "qwen/qwen3-30b-a3b-2507",
-          "context_window": 256000,
-          "default_max_tokens": 20000
-        }
-      ]
-    }
-  }
-}
-```
-
-## Logging
-
-Sometimes you need to look at logs. Luckily, Crush logs all sorts of
-stuff. Logs are stored in `./.crush/logs/crush.log` relative to the project.
-
-The CLI also contains some helper commands to make perusing recent logs easier:
-
-```bash
-# Print the last 1000 lines
-crush logs
-
-# Print the last 500 lines
-crush logs --tail 500
-
-# Follow logs in real time
-crush logs --follow
-```
-
-Want more logging? Run `crush` with the `--debug` flag, or enable it in the
-config:
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "options": {
-    "debug": true,
-    "debug_lsp": true
-  }
-}
-```
-
-## Provider Auto-Updates
-
-By default, Crush automatically checks for the latest and greatest list of
-providers and models from [Catwalk](https://github.com/charmbracelet/catwalk),
-the open source Crush provider database. This means that when new providers and
-models are available, or when model metadata changes, Crush automatically
-updates your local configuration.
-
-### Disabling automatic provider updates
-
-For those with restricted internet access, or those who prefer to work in
-air-gapped environments, this might not be want you want, and this feature can
-be disabled.
-
-To disable automatic provider updates, set `disable_provider_auto_update` into
-your `crush.json` config:
-
-```json
-{
-  "$schema": "https://charm.land/crush.json",
-  "options": {
-    "disable_provider_auto_update": true
-  }
-}
-```
-
-Or set the `CRUSH_DISABLE_PROVIDER_AUTO_UPDATE` environment variable:
-
-```bash
-export CRUSH_DISABLE_PROVIDER_AUTO_UPDATE=1
-```
-
-### Manually updating providers
-
-Manually updating providers is possible with the `crush update-providers`
-command:
-
-```bash
-# Update providers remotely from Catwalk.
-crush update-providers
-
-# Update providers from a custom Catwalk base URL.
-crush update-providers https://example.com/
-
-# Update providers from a local file.
-crush update-providers /path/to/local-providers.json
-
-# Reset providers to the embedded version, embedded at crush at build time.
-crush update-providers embedded
-
-# For more info:
-crush update-providers --help
-```
-
-## Metrics
-
-Crush records pseudonymous usage metrics (tied to a device-specific hash),
-which maintainers rely on to inform development and support priorities. The
-metrics include solely usage metadata; prompts and responses are NEVER
-collected.
-
-Details on exactly what’s collected are in the source code ([here](https://github.com/charmbracelet/crush/tree/main/internal/event)
-and [here](https://github.com/charmbracelet/crush/blob/main/internal/llm/agent/event.go)).
-
-You can opt out of metrics collection at any time by setting the environment
-variable by setting the following in your environment:
-
-```bash
-export CRUSH_DISABLE_METRICS=1
-```
-
-Or by setting the following in your config:
-
-```json
-{
-  "options": {
-    "disable_metrics": true
-  }
-}
-```
-
-Crush also respects the [`DO_NOT_TRACK`](https://donottrack.sh/) convention
-which can be enabled via `export DO_NOT_TRACK=1`.
-
-## Q&A
-
-### Why is clipboard copy and paste not working?
-
-Installing an extra tool might be needed on Unix-like environments.
-
-| Environment         | Tool                     |
-| ------------------- | ------------------------ |
-| Windows             | Native support           |
-| macOS               | Native support           |
-| Linux/BSD + Wayland | `wl-copy` and `wl-paste` |
-| Linux/BSD + X11     | `xclip` or `xsel`        |
-
-## Contributing
-
-See the [contributing guide](https://github.com/charmbracelet/crush?tab=contributing-ov-file#contributing).
-
-## Whatcha think?
-
-We’d love to hear your thoughts on this project. Need help? We gotchu. You can find us on:
-
-- [Twitter](https://twitter.com/charmcli)
-- [Slack][slack]
-- [Discord][discord]
-- [The Fediverse](https://mastodon.social/@charmcli)
-- [Bluesky](https://bsky.app/profile/charm.land)
-
-[slack]: https://charm.land/slack
-[discord]: https://charm.land/discord
 
 ## License
 
-[FSL-1.1-MIT](https://github.com/charmbracelet/crush/raw/main/LICENSE.md)
+MIT License - See LICENSE.md
 
 ---
 
-Part of [Charm](https://charm.land).
-
-<a href="https://charm.land/"><img alt="The Charm logo" width="400" src="https://stuff.charm.sh/charm-banner-softy.jpg" /></a>
-
-<!--prettier-ignore-->
-Charm热爱开源 • Charm loves open source
+<p align="center">
+<br/>
+█ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █<br/>
+<em>Your adventure awaits...</em><br/>
+█ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █
+</p>

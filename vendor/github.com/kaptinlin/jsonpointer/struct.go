@@ -1,0 +1,73 @@
+package jsonpointer
+
+import (
+	"reflect"
+	"strings"
+	"sync"
+)
+
+// structFields caches field mapping for struct types.
+type structFields map[string]int
+
+// structFieldsCache is a global cache that stores field mapping for each struct type.
+var structFieldsCache sync.Map
+
+// structField looks up the specified field in a struct and updates value to point to that field if found.
+// Returns true if the field exists and is accessible, false otherwise.
+func structField(field string, value *reflect.Value) bool {
+	for value.Kind() == reflect.Pointer {
+		if value.IsNil() {
+			return false
+		}
+		*value = value.Elem()
+	}
+
+	if value.Kind() != reflect.Struct {
+		return false
+	}
+
+	fields := getStructFields(value.Type())
+	fieldIndex, ok := fields[field]
+	if !ok {
+		return false
+	}
+
+	*value = value.Field(fieldIndex)
+	return true
+}
+
+func getStructFields(t reflect.Type) structFields {
+	if cached, ok := structFieldsCache.Load(t); ok {
+		return cached.(structFields)
+	}
+
+	fields := make(structFields)
+	for field := range t.Fields() {
+		if !field.IsExported() {
+			continue
+		}
+
+		name := getFieldName(&field)
+		if name == "-" {
+			continue
+		}
+
+		fields[name] = field.Index[0]
+	}
+
+	structFieldsCache.Store(t, fields)
+	return fields
+}
+
+func getFieldName(field *reflect.StructField) string {
+	tag := field.Tag.Get("json")
+	if tag == "" {
+		return field.Name
+	}
+
+	name, _, _ := strings.Cut(tag, ",")
+	if name != "" {
+		return name
+	}
+	return field.Name
+}
