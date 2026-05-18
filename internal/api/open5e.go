@@ -6,22 +6,93 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 )
+
+// Cache entry with TTL tracking.
+type cacheEntry struct {
+	data      []byte
+	expiresAt time.Time
+}
+
+// Open5eCache provides an in-memory TTL cache for API responses.
+type Open5eCache struct {
+	entries map[string]cacheEntry
+	mu      sync.RWMutex
+	ttl     time.Duration
+}
+
+// NewOpen5eCache creates a new cache with the specified TTL.
+func NewOpen5eCache(ttl time.Duration) *Open5eCache {
+	return &Open5eCache{
+		entries: make(map[string]cacheEntry),
+		ttl:     ttl,
+	}
+}
+
+// CacheGet retrieves a cached value if it exists and is not expired.
+// Returns nil if the key is not found or has expired.
+func (c *Open5eCache) CacheGet(key string) ([]byte, bool) {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+
+	entry, ok := c.entries[key]
+	if !ok {
+		return nil, false
+	}
+	if time.Now().After(entry.expiresAt) {
+		return nil, false
+	}
+	return entry.data, true
+}
+
+// CacheSet stores a value in the cache with the configured TTL.
+func (c *Open5eCache) CacheSet(key string, data []byte) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	c.entries[key] = cacheEntry{
+		data:      data,
+		expiresAt: time.Now().Add(c.ttl),
+	}
+}
+
+// cacheKey builds a cache key from endpoint and parameters.
+func cacheKey(endpoint string, params ...string) string {
+	key := endpoint
+	for _, p := range params {
+		key += "/" + p
+	}
+	return key
+}
 
 // Open5eClient is an HTTP client for the open5e.com API.
 type Open5eClient struct {
 	baseURL string
 	client  *http.Client
+	cache   *Open5eCache
 }
 
-// NewOpen5eClient creates a new Open5e API client.
+// NewOpen5eClient creates a new Open5e API client with a 24-hour TTL cache.
 func NewOpen5eClient() *Open5eClient {
 	return &Open5eClient{
 		baseURL: "https://api.open5e.com",
 		client: &http.Client{
 			Timeout: 30 * time.Second,
 		},
+		cache: NewOpen5eCache(24 * time.Hour),
+	}
+}
+
+// NewOpen5eClientWithCache creates a new Open5e API client with a custom cache.
+func NewOpen5eClientWithCache(cache *Open5eCache) *Open5eClient {
+	return &Open5eClient{
+		baseURL: "https://api.open5e.com",
+		client: &http.Client{
+			Timeout: 30 * time.Second,
+		},
+		cache: cache,
 	}
 }
 
@@ -98,6 +169,14 @@ type MonsterListResponse struct {
 
 // GetSpell fetches a single spell by its slug.
 func (c *Open5eClient) GetSpell(ctx context.Context, slug string) (*Spell, error) {
+	key := cacheKey("spell", slug)
+	if data, ok := c.cache.CacheGet(key); ok {
+		var spell Spell
+		if err := json.Unmarshal(data, &spell); err == nil {
+			return &spell, nil
+		}
+	}
+
 	url := fmt.Sprintf("%s/v1/spells/%s/", c.baseURL, slug)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
@@ -119,6 +198,11 @@ func (c *Open5eClient) GetSpell(ctx context.Context, slug string) (*Spell, error
 	if err := json.NewDecoder(resp.Body).Decode(&spell); err != nil {
 		return nil, fmt.Errorf("failed to decode spell: %w", err)
 	}
+
+	if data, err := json.Marshal(spell); err == nil {
+		c.cache.CacheSet(key, data)
+	}
+
 	return &spell, nil
 }
 
