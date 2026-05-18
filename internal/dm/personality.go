@@ -127,16 +127,89 @@ func (p *Personality) RollingSentiment(lastN int) float64 {
 // FlavorText returns Antarctic-themed flavor text based on current mood.
 // The AntarcticaReferences level controls frequency of usage.
 func (p *Personality) FlavorText(baseText string) string {
-	// Always include base text, but may prepend Antarctic flavor
-	return baseText
+	// Check if we should inject Antarctic flavor based on trait level
+	if !p.ShouldInjectAntarcticaJoke() {
+		return baseText
+	}
+
+	// AntarcticaReferences threshold: only inject if high enough
+	if p.AntarcticaReferences < 3 {
+		return baseText
+	}
+
+	// Build Antarctic flavor based on HumorLevel
+	flavor := p.buildAntarcticFlavor()
+
+	// Prepend flavor to base text
+	return flavor + "\n" + baseText
+}
+
+// buildAntarcticFlavor generates Antarctic-themed flavor text.
+// The tone and content vary based on HumorLevel.
+func (p *Personality) buildAntarcticFlavor() string {
+	// Flavor templates organized by intensity
+	penguinFlavors := []string{
+		"A nearby penguin watches with what appears to be disapproval.",
+		"An Emperor penguin waddles past, utterly indifferent to your quest.",
+		"The wind carries what sounds suspiciously like penguin chattering.",
+		"A Adelie penguin stares at you judgmentally from an ice floe.",
+	}
+
+	weatherFlavors := []string{
+		"The cold creeps in just a little more.",
+		"A gust of frigid air sweeps through, carrying ice crystals.",
+		"The aurora australis shimmers overhead, painting the sky green.",
+		"Snow begins to fall, soft and relentless.",
+	}
+
+	stationFlavors := []string{
+		"Somewhere in the distance, a research station radio crackles to life.",
+		"The hum of station equipment provides an odd sense of comfort.",
+		"You notice supply crates marked 'McMurdo Station' nearby.",
+		"A weathered flag from an Antarctic expedition flaps in the wind.",
+	}
+
+	iceFlavors := []string{
+		"The ice beneath your feet groans ominously.",
+		"Cracks spread across the frozen surface like veins.",
+		"An iceberg the size of a castle drifts past on the horizon.",
+		"The ice sheet stretches endlessly in all directions.",
+	}
+
+	// Select flavor based on HumorLevel ranges
+	var flavors []string
+	switch {
+	case p.HumorLevel >= 8:
+		// High humor: more playful penguin references
+		flavors = append(penguinFlavors[:2], append(weatherFlavors[:1], stationFlavors[:1]...)...)
+	case p.HumorLevel >= 5:
+		// Medium humor: balanced mix
+		flavors = append(weatherFlavors[:2], append(iceFlavors[:1], stationFlavors[:1]...)...)
+	default:
+		// Low humor: subtle, atmospheric
+		flavors = append(iceFlavors[:2], weatherFlavors[2:]...)
+	}
+
+	// Pick one based on TotalVotes for variety
+	idx := p.TotalVotes % len(flavors)
+	return flavors[idx]
 }
 
 // ShouldInjectAntarcticaJoke returns true based on HumorLevel.
-// Approximately every (10 - HumorLevel) calls will trigger a gag.
+// Higher HumorLevel = more jokes (not fewer).
+// At HumorLevel 10, always injects (100%).
+// At HumorLevel 0, never injects (0%).
 func (p *Personality) ShouldInjectAntarcticaJoke() bool {
-	// With HumorLevel 3 (default), ~70% chance to inject
-	// With HumorLevel 7, ~30% chance to inject
-	return (float64(p.TotalVotes%10) < p.HumorLevel)
+	if p.HumorLevel <= 0 {
+		return false
+	}
+	if p.HumorLevel >= 10 {
+		return true
+	}
+	// Higher TotalVotes creates natural variation in injection frequency
+	// Mod 10 gives us a value 0-9, we inject when value < HumorLevel scaled to 0-9
+	threshold := int(p.HumorLevel)
+	return (p.TotalVotes%10) < threshold
 }
 
 // GetMood returns the DM's current mood based on accumulated state.

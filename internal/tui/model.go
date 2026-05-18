@@ -416,40 +416,221 @@ func (m Model) renderMainView(vp viewport) string {
 // renderCharacterView renders the character sheet view.
 func (m Model) renderCharacterView(vp viewport) string {
 	var s strings.Builder
-	s.WriteString(m.renderBoxTitle("CHARACTER SHEET", vp.Width))
-	// Character view content to be implemented
+
+	// Render box top border
+	s.WriteString(boxTopLeft)
+	s.WriteString(strings.Repeat(boxHorizontal, vp.Width-2))
+	s.WriteString(boxTopRight)
+	s.WriteString("\n")
+
+	// If we have a character, render the full character sheet
+	if len(m.Characters) > 0 && m.Characters[0] != nil {
+		char := m.Characters[0]
+		sheet := NewCharacterSheet(char, vp.Width)
+		s.WriteString(sheet.Render())
+	} else {
+		// No character selected - show placeholder
+		s.WriteString(m.renderBoxContent("No character selected", vp.Width))
+	}
+
+	// Render box bottom border
+	s.WriteString(boxBottomLeft)
+	s.WriteString(strings.Repeat(boxHorizontal, vp.Width-2))
+	s.WriteString(boxBottomRight)
+	s.WriteString("\n")
+
 	return s.String()
 }
 
 // renderCombatView renders the combat view.
 func (m Model) renderCombatView(vp viewport) string {
 	var s strings.Builder
-	s.WriteString(m.renderBoxTitle("COMBAT", vp.Width))
-	// Combat view content to be implemented
+
+	// Render box top border
+	s.WriteString(boxTopLeft)
+	s.WriteString(strings.Repeat(boxHorizontal, vp.Width-2))
+	s.WriteString(boxTopRight)
+	s.WriteString("\n")
+
+	if len(m.Characters) > 0 && m.Characters[0] != nil {
+		char := m.Characters[0]
+
+		// Combat header
+		s.WriteString(fmt.Sprintf("%s--- COMBAT ---\n", boxVertical))
+
+		// HP bar
+		hpBar := RenderHPBarStatic(char.HP, char.MaxHP)
+		s.WriteString(fmt.Sprintf("%s HP: %s %s\n", boxVertical, hpBar, boxVertical))
+
+		// AC
+		acLine := fmt.Sprintf(" AC: %d", char.AC)
+		s.WriteString(fmt.Sprintf("%s %s %s\n", boxVertical, acLine, boxVertical))
+
+		// Initiative (Dex modifier)
+		initMod := char.Stats.Modifier(char.Stats.Dexterity)
+		initLine := fmt.Sprintf(" Initiative: %+d", initMod)
+		s.WriteString(fmt.Sprintf("%s %s %s\n", boxVertical, initLine, boxVertical))
+
+		// Proficiency (derived from level)
+		profBonus := 1 + (char.Level-1)/4
+		profLine := fmt.Sprintf(" Proficiency: +%d", profBonus)
+		s.WriteString(fmt.Sprintf("%s %s %s\n", boxVertical, profLine, boxVertical))
+
+		// Speed (default 30 ft if not specified)
+		speedLine := " Speed: 30 ft"
+		s.WriteString(fmt.Sprintf("%s %s %s\n", boxVertical, speedLine, boxVertical))
+	} else {
+		s.WriteString(m.renderBoxContent("No character loaded", vp.Width))
+	}
+
+	// Render box bottom border
+	s.WriteString(boxBottomLeft)
+	s.WriteString(strings.Repeat(boxHorizontal, vp.Width-2))
+	s.WriteString(boxBottomRight)
+	s.WriteString("\n")
+
 	return s.String()
 }
 
 // renderInventoryView renders the inventory view.
 func (m Model) renderInventoryView(vp viewport) string {
 	var s strings.Builder
-	s.WriteString(m.renderBoxTitle("INVENTORY", vp.Width))
-	// Inventory view content to be implemented
+
+	// Render box top border
+	s.WriteString(boxTopLeft)
+	s.WriteString(strings.Repeat(boxHorizontal, vp.Width-2))
+	s.WriteString(boxTopRight)
+	s.WriteString("\n")
+
+	// If we have a character, render the inventory display
+	if len(m.Characters) > 0 && m.Characters[0] != nil {
+		char := m.Characters[0]
+		inv := NewInventoryDisplay(char, vp.Width)
+		s.WriteString(inv.Render())
+	} else {
+		// No character selected - show placeholder
+		s.WriteString(m.renderBoxContent("No character selected", vp.Width))
+	}
+
+	// Render box bottom border
+	s.WriteString(boxBottomLeft)
+	s.WriteString(strings.Repeat(boxHorizontal, vp.Width-2))
+	s.WriteString(boxBottomRight)
+	s.WriteString("\n")
+
 	return s.String()
 }
 
 // renderDiceView renders the dice roll view.
 func (m Model) renderDiceView(vp viewport) string {
 	var s strings.Builder
-	s.WriteString(m.renderBoxTitle("DICE ROLLER", vp.Width))
-	// Dice view content to be implemented
+
+	// Render box top border
+	s.WriteString(boxTopLeft)
+	s.WriteString(strings.Repeat(boxHorizontal, vp.Width-2))
+	s.WriteString(boxTopRight)
+	s.WriteString("\n")
+
+	// Header
+	s.WriteString(fmt.Sprintf("%s--- DICE ROLLER ---\n", boxVertical))
+
+	// Dice notation reference
+	refLine := " Notation: XdY+Z (e.g. 2d20+5)"
+	s.WriteString(fmt.Sprintf("%s%s%s\n", boxVertical, refLine, boxVertical))
+
+	// Separator
+	s.WriteString(fmt.Sprintf("%s%s%s%s%s\n", boxVertical, boxLeftT,
+		strings.Repeat(boxHorizontal, vp.Width-4), boxRightT, boxVertical))
+
+	// Recent rolls section
+	s.WriteString(fmt.Sprintf("%s--- RECENT ROLLS ---\n", boxVertical))
+
+	if len(m.Output) == 0 {
+		s.WriteString(fmt.Sprintf("%s No rolls yet%s\n", boxVertical, boxVertical))
+	} else {
+		// Show last 5 rolls from output that contain "Rolled"
+		count := 0
+		for i := len(m.Output) - 1; i >= 0 && count < 5; i-- {
+			if strings.Contains(m.Output[i], "Rolled") {
+				line := m.Output[i]
+				if len(line) > vp.Width-4 {
+					line = line[:vp.Width-4] + ".."
+				}
+				s.WriteString(fmt.Sprintf("%s %s %s\n", boxVertical, line, boxVertical))
+				count++
+			}
+		}
+		if count == 0 {
+			s.WriteString(fmt.Sprintf("%s No rolls yet%s\n", boxVertical, boxVertical))
+		}
+	}
+
+	// Help text
+	s.WriteString(fmt.Sprintf("%s%s%s%s%s\n", boxVertical, boxLeftT,
+		strings.Repeat(boxHorizontal, vp.Width-4), boxRightT, boxVertical))
+	s.WriteString(fmt.Sprintf("%s Type dice notation and press Enter %s\n", boxVertical, boxVertical))
+
+	// Render box bottom border
+	s.WriteString(boxBottomLeft)
+	s.WriteString(strings.Repeat(boxHorizontal, vp.Width-2))
+	s.WriteString(boxBottomRight)
+	s.WriteString("\n")
+
 	return s.String()
 }
 
 // renderMenuView renders the main menu view.
 func (m Model) renderMenuView(vp viewport) string {
 	var s strings.Builder
-	s.WriteString(m.renderBoxTitle("MAIN MENU", vp.Width))
-	// Menu view content to be implemented
+
+	// Render box top border
+	s.WriteString(boxTopLeft)
+	s.WriteString(strings.Repeat(boxHorizontal, vp.Width-2))
+	s.WriteString(boxTopRight)
+	s.WriteString("\n")
+
+	// Header
+	s.WriteString(fmt.Sprintf("%s--- MAIN MENU ---\n", boxVertical))
+
+	// Menu options
+	menuItems := []string{
+		"[C] Character Sheet",
+		"[V] Combat Tracker",
+		"[I] Inventory",
+		"[D] Dice Roller",
+		"[M] Main View",
+		"[Q] Quit",
+	}
+
+	for _, item := range menuItems {
+		padding := vp.Width - 4 - len(item)
+		if padding < 0 {
+			padding = 0
+		}
+		s.WriteString(fmt.Sprintf("%s %s%s%s %s\n", boxVertical, item, strings.Repeat(" ", padding), boxVertical, boxVertical))
+	}
+
+	// Separator
+	s.WriteString(fmt.Sprintf("%s%s%s%s%s\n", boxVertical, boxLeftT,
+		strings.Repeat(boxHorizontal, vp.Width-4), boxRightT, boxVertical))
+
+	// Session info
+	sessionLine := fmt.Sprintf(" Session: %s", m.SessionID[:8])
+	if len(sessionLine) > vp.Width-4 {
+		sessionLine = sessionLine[:vp.Width-4] + ".."
+	}
+	padding := vp.Width - 4 - len(sessionLine)
+	if padding < 0 {
+		padding = 0
+	}
+	s.WriteString(fmt.Sprintf("%s %s%s%s\n", boxVertical, sessionLine, strings.Repeat(" ", padding), boxVertical))
+
+	// Render box bottom border
+	s.WriteString(boxBottomLeft)
+	s.WriteString(strings.Repeat(boxHorizontal, vp.Width-2))
+	s.WriteString(boxBottomRight)
+	s.WriteString("\n")
+
 	return s.String()
 }
 
@@ -470,6 +651,22 @@ func (m Model) renderBoxTitle(title string, width int) string {
 	s.WriteString(" ")
 	s.WriteString(strings.Repeat(boxHorizontal, width-padding-lipgloss.Width(title)-5))
 	s.WriteString(boxTopRight)
+	s.WriteString("\n")
+
+	return s.String()
+}
+
+// renderBoxContent renders a single line of content inside a box border.
+func (m Model) renderBoxContent(content string, width int) string {
+	var s strings.Builder
+	innerWidth := width - 4
+
+	s.WriteString(boxVertical)
+	s.WriteString(" ")
+	s.WriteString(content)
+	s.WriteString(strings.Repeat(" ", innerWidth-len(content)))
+	s.WriteString(" ")
+	s.WriteString(boxVertical)
 	s.WriteString("\n")
 
 	return s.String()
