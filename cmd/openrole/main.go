@@ -74,14 +74,18 @@ func (m model) View() tea.View {
 	s += "\n\n"
 
 	if len(m.output) > 0 {
-		for _, line := range m.output[len(m.output)-20:] {
+		start := 0
+		if len(m.output) > 20 {
+			start = len(m.output) - 20
+		}
+		for _, line := range m.output[start:] {
 			s += line + "\n"
 		}
 		s += "\n"
 	}
 
 	s += infoStyle.Render(fmt.Sprintf("DM: %s | Session: %s",
-		m.dmState.Personality.BaseDescription[:40]+"...", m.sessionID[:8]))
+		truncate(m.dmState.Personality.BaseDescription, 40), m.sessionID[:min(8, len(m.sessionID))]))
 
 	if m.err != nil {
 		s += "\n"
@@ -93,6 +97,22 @@ func (m model) View() tea.View {
 	s += " "
 
 	return tea.NewView(s)
+}
+
+// truncate truncates a string to maxLen characters, adding "..." if truncated.
+func truncate(s string, maxLen int) string {
+	if len(s) <= maxLen {
+		return s
+	}
+	return s[:maxLen-3] + "..."
+}
+
+// min returns the minimum of two integers.
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 func main() {
